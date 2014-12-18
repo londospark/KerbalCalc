@@ -1,4 +1,19 @@
-﻿using UnityEngine;
+﻿// This file is part of KerbalCalc.
+// 
+// KerbalCalc is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// KerbalCalc is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with KerbalCalc. If not, see <http://www.gnu.org/licenses/>.
+
+using UnityEngine;
 
 namespace KerbalCalc
 {
@@ -15,7 +30,9 @@ namespace KerbalCalc
         public void AddButton()
         {
             if (_button == null)
-                _button = ApplicationLauncher.Instance.AddModApplication(Show, Hide, null, null, null, null, ApplicationLauncher.AppScenes.ALWAYS, GameDatabase.Instance.GetTexture("KerbalCalc/Textures/Icon", false));
+                _button = ApplicationLauncher.Instance.AddModApplication(Show, Hide, null, null, null, null,
+                    ApplicationLauncher.AppScenes.ALWAYS,
+                    GameDatabase.Instance.GetTexture("KerbalCalc/Textures/Icon", false));
         }
 
         public void Awake()
@@ -45,7 +62,8 @@ namespace KerbalCalc
         {
             if (!_visible) return;
 
-            _screenRect = GUILayout.Window(GetInstanceID(), _screenRect, CreateWindow, "Kerbal Calculator", HighLogic.Skin.window, GUILayout.ExpandWidth(false));
+            _screenRect = GUILayout.Window(GetInstanceID(), _screenRect, CreateWindow, "Kerbal Calculator",
+                HighLogic.Skin.window, GUILayout.ExpandWidth(false));
             if (HighLogic.LoadedScene == GameScenes.SPACECENTER ||
                 _hasBeenCentred ||
                 !(_screenRect.width > 0.0f) ||
@@ -53,7 +71,7 @@ namespace KerbalCalc
                 return;
 
             _hasBeenCentred = true;
-            _screenRect.center = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            _screenRect.center = new Vector2(Screen.width*0.5f, Screen.height*0.5f);
         }
 
         private void CreateWindow(int windowId)
