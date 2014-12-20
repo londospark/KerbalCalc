@@ -22,6 +22,7 @@ namespace KerbalCalc
         public string Screen { get; set; }
         private Func<double, double, double> _operation;
         private double _heldOperand;
+        private bool _reset;
 
         public Calc()
         {
@@ -30,15 +31,16 @@ namespace KerbalCalc
 
         public void AddDigit(int digit)
         {
-            if (Screen.Contains("ERROR"))
+            if (Screen.Contains("ERROR") || _reset)
                 Screen = "";
 
             Screen += digit.ToString();
+            _reset = false;
         }
 
         public void AddDecimal()
         {
-            if (Screen.Contains("ERROR"))
+            if (Screen.Contains("ERROR") || _reset)
                 Screen = "";
 
             if (Screen.Contains("."))
@@ -48,16 +50,7 @@ namespace KerbalCalc
                 Screen = "0";
 
             Screen += ".";
-        }
-
-        public void NaturalLog()
-        {
-            double operand;
-
-            if (double.TryParse(Screen, out operand))
-                Screen = Math.Log(operand).ToString();
-            else
-                Screen = "ERROR";
+            _reset = false;
         }
 
         public void Calculate()
@@ -65,7 +58,10 @@ namespace KerbalCalc
             double operand;
 
             if (double.TryParse(Screen, out operand) && _operation != null)
+            {
                 Screen = _operation(_heldOperand, operand).ToString();
+                _reset = true;
+            }
             else
                 Screen = "ERROR";
         }
@@ -90,6 +86,11 @@ namespace KerbalCalc
             StageOperator((firstOperand, secondOperand) => firstOperand/secondOperand);
         }
 
+        public void StagePower()
+        {
+            StageOperator(Math.Pow);
+        }
+
         private void StageOperator(Func<double, double, double> operation)
         {
             if (!double.TryParse(Screen, out _heldOperand))
@@ -100,6 +101,34 @@ namespace KerbalCalc
 
             _operation = operation;
             Screen = "";
+        }
+
+        public void UnaryOperation(Func<double, double> operation)
+        {
+            double operand;
+
+            if (double.TryParse(Screen, out operand))
+            {
+                Screen = operation(operand).ToString();
+                _reset = true;
+            }
+            else
+                Screen = "ERROR";
+        }
+
+        public void NaturalLog()
+        {
+            UnaryOperation(Math.Log);
+        }
+
+        public void Square()
+        {
+            UnaryOperation(operand => Math.Pow(operand, 2));
+        }
+
+        public void Cube()
+        {
+            UnaryOperation(operand => Math.Pow(operand, 3));
         }
     }
 }

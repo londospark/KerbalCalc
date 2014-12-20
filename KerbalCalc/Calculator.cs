@@ -82,6 +82,9 @@ namespace KerbalCalc
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("ln")) _calculator.NaturalLog();
+            if (GUILayout.Button("x^2")) _calculator.Square();
+            if (GUILayout.Button("x^3")) _calculator.Cube();
+            if (GUILayout.Button("x^y")) _calculator.StagePower();
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
